@@ -1,36 +1,159 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Capacitor.js Android & iOS Setup Guide
 
-## Getting Started
+This guide walks you through setting up and running a Capacitor.js application on Android and iOS platforms.
 
-First, run the development server:
+## Overview
+
+[Capacitor](https://capacitorjs.com/) is a cross-platform native runtime that makes it easy to build web apps that run natively on iOS, Android, and the web. This README provides step-by-step instructions to get your Capacitor app running on mobile devices.
+
+## Prerequisites
+
+- Node.js (12.x+) and npm (6.x+)
+- For iOS development:
+  - macOS
+  - Xcode (latest stable version)
+  - CocoaPods (`sudo gem install cocoapods`)
+- For Android development:
+  - [Android Studio](https://developer.android.com/studio)
+  - Java JDK 11+
+  - Gradle
+
+## Installation
+
+### 1. Create or use an existing web application
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# If starting a new project
+npm init @capacitor/app
+
+# Or use an existing project
+cd your-existing-project
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Add Capacitor to your project
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+# Install Capacitor core and CLI
+npm install @capacitor/core @capacitor/cli
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Initialize Capacitor with your app information
+npx cap init [appName] [appId]
+# Example: npx cap init "My App" com.example.myapp
+```
 
-## Learn More
+### 3. Install platform-specific packages
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Add Android and iOS platforms
+npm install @capacitor/android
+npm install @capacitor/ios
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 4. Add native platforms to your project
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# Add Android
+npx cap add android
 
-## Deploy on Vercel
+# Add iOS
+npx cap add ios
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Configuration
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Configure Android
+
+1. Open `android/app/src/main/AndroidManifest.xml` to customize app permissions
+2. Modify `android/app/build.gradle` for dependencies and settings
+3. Edit `capacitor.config.json` to configure app settings
+
+### Configure iOS
+
+1. Open `ios/App/App/Info.plist` for app permissions and settings
+2. Adjust `capacitor.config.json` for iOS-specific configurations
+
+## Building Your App
+
+Ensure your web assets are built and ready:
+
+```bash
+# Build your web app (example - adjust according to your framework)
+npm run build
+```
+
+Then copy the web assets to the native projects:
+
+```bash
+npx cap copy
+```
+
+## Running Your App
+
+### Android
+
+```bash
+# Open Android Studio with the project
+npx cap open android
+
+# Or sync and run directly
+npx cap sync android
+npx cap run android
+```
+
+### iOS
+
+```bash
+# Open Xcode with the project
+npx cap open ios
+
+# Or sync and run directly
+npx cap sync ios
+npx cap run ios
+```
+
+## Live Reload During Development
+
+Enable live reload for faster development:
+
+```bash
+npx cap run android -l --external
+# or
+npx cap run ios -l --external
+```
+
+## Common Issues & Troubleshooting
+
+- **Plugin Not Found**: Make sure to run `npx cap sync` after installing new plugins
+- **Build Errors**: Check for compatibility between Capacitor version and plugins
+- **iOS Build Fails**: Run `pod install` in the `ios/App` directory
+- **Android Gradle Issues**: Update Gradle version in `android/gradle/wrapper/gradle-wrapper.properties`
+
+## Updating Capacitor
+
+```bash
+npm install @capacitor/core@latest @capacitor/cli@latest
+npm install @capacitor/android@latest @capacitor/ios@latest
+npx cap sync
+```
+
+## Useful Commands
+
+```bash
+# List available devices
+npx cap run android --list
+npx cap run ios --list
+
+# Target a specific device
+npx cap run android --target=Pixel_4_API_30
+npx cap run ios --target="iPhone 12"
+```
+
+## Resources
+
+- [Official Capacitor Documentation](https://capacitorjs.com/docs)
+- [Capacitor GitHub Repository](https://github.com/ionic-team/capacitor)
+- [Capacitor Community Plugins](https://github.com/capacitor-community)
+
+## License
+
+This project is licensed under the MIT License - see your project's LICENSE file for details.
